@@ -59,7 +59,7 @@ beta_ = [0] * (len(data_r.columns) - 1)
 gamma_ = [0] * (len(data_d.columns) - 1)
 daystamp = "531"
 
-city,city0 = "東京","tokyo"
+#city,city0 = "東京","tokyo"
 #city,city0 = "大阪","oosaka" 
 #city,city0 = "北海道","hokkaido"
 #city,city0 = "愛知","aichi"
@@ -74,6 +74,7 @@ city,city0 = "東京","tokyo"
 #city,city0 = "沖縄","okinawa"
 #city,city0 = "合計","total_japan"
 #city,city0 = "総計","total_japan"
+city,city0 = "東京以外","extokyo"
 
 skd=1 #2 #1 #4 #3 #2 #slopes average factor
 #データを加工する
@@ -117,12 +118,12 @@ df = pd.DataFrame(df,index = date)
 df['Close'] = day_confirmed
 df.to_csv('data/day_comfirmed_new_{}.csv'.format(city0))
 date_df=df['Close'].index.tolist() #ここがポイント
-print(date_df[0:30])
+print(date_df[20:54])
 series = df['Close'].values.tolist()
 stock0 = city0
 stock = stock0
 start = dt.date(2020,6,1)
-end = dt.date(2020,7,12)
+end = dt.date(2020,7,24)
 
 bunseki = "trend" #series" #cycle" #trend
 cycle, trend = sm.tsa.filters.hpfilter(series, 144)
@@ -147,10 +148,10 @@ ax2.plot(ind3,signal,label="signal")
 ax2.bar(ind3,hist_)
 ax1.legend()
 ax2.legend()
-ax1.set_ylim(10,1000)
-#ax2.set_ylim(10,1000)
+ax1.set_ylim(10,1500)
+ax2.set_ylim(1,)
 ax1.set_yscale('log')
-#ax2.set_yscale('log')
+ax2.set_yscale('log')
 ax1.grid()
 ax2.grid()
 plt.savefig("./fig/{}/ema_decompose_%5K%25D_{}_{}new{}.png".format(stock0,stock,bunseki,start))
@@ -165,7 +166,7 @@ df['MACD'] = df['y12'] -df['y26']
 df['signal'] = EMA1(df['MACD'], 9)
 df['hist_']=df['MACD']-df['signal']
 date_df=df['Close'].index.tolist()
-print(df[0:30])
+print(df[20:55])
 
 fig, (ax1,ax2) = plt.subplots(2,1,figsize=(1.6180 * 8, 4*2),dpi=200)
 ax1.bar(ind3,series, label="series")
@@ -177,8 +178,10 @@ ax2.plot(df['signal'],label="signal")
 ax2.bar(date_df,df['hist_'])
 ax1.legend()
 ax2.legend()
-ax1.set_ylim(10,1000)
+ax1.set_ylim(10,1500)
+ax2.set_ylim(1,)
 ax1.set_yscale('log')
+ax2.set_yscale('log')
 ax1.grid()
 ax2.grid()
 plt.savefig("./fig/{}/ema_df_decompose_%5K%25D_{}_{}new{}.png".format(stock0,stock,bunseki,start))
